@@ -16,7 +16,7 @@ object Extraction {
   def locateTemperatures(year: Year, stationsFile: String, temperaturesFile: String): Iterable[(LocalDate, Location, Temperature)] = {
     //    ???
     val statStrings = ofFile(stationsFile).filter(_.length > 2)
-    val stations: Map[String, Location] = statStrings.toSeq.groupBy(s=>s(0)+"_"+s(1)).mapValues(l => Location(l.head(2).toDouble, l.head(3).toDouble))
+    val stations: Map[String, Location] = statStrings.toSeq.groupBy(s => s(0) + "_" + s(1)).mapValues(l => Location(l.head(2).toDouble, l.head(3).toDouble))
     //  010010,,01,01,23.2
     //  010010,,01,20,16.5
     val tempStrings = ofFile(temperaturesFile).filter(_.length > 3)
@@ -31,9 +31,9 @@ object Extraction {
   }
 
   private def ofFile(stationsFile: String): Iterator[Array[String]] = {
-//    val stream0 = getClass.getResourceAsStream(stationsFile)
-//    println(stationsFile)
-//    println (scala.io.Source.fromInputStream(stream0).getLines().mkString("\n"))
+    //    val stream0 = getClass.getResourceAsStream(stationsFile)
+    //    println(stationsFile)
+    //    println (scala.io.Source.fromInputStream(stream0).getLines().mkString("\n"))
     val stream = getClass.getResourceAsStream(stationsFile)
     scala.io.Source.fromInputStream(stream).getLines().map(_.split(','))
   }
@@ -44,12 +44,10 @@ object Extraction {
     */
   def locationYearlyAverageRecords(records: Iterable[(LocalDate, Location, Temperature)]): Iterable[(Location, Temperature)] = {
     //    ???
-    val locationToTuples =
-      records
-        .groupBy(_._2)
-        .mapValues(_.map { case (_, _, temp) => temp })
-        .mapValues { rec => rec.foldLeft(0.0) { (acc, cur) => acc + cur } / rec.size }
-    locationToTuples
+    records
+      .groupBy(_._2)
+      .mapValues(_.map { case (_, _, temp) => temp })
+      .mapValues { rec => rec.foldLeft(0.0) { (acc, cur) => acc + cur } / rec.size }
   }
 
 }
